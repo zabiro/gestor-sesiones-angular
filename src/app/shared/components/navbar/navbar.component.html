@@ -1,0 +1,42 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="nav-left">
+    <span class="brand">Gestor de Sesiones</span>
+
+    <a mat-button routerLink="/calendar" routerLinkActive="active-link">
+      <mat-icon>calendar_month</mat-icon>
+      <span class="nav-label">Calendario</span>
+    </a>
+
+    @if (isAdmin) {
+      <a mat-button routerLink="/admin" routerLinkActive="active-link">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span class="nav-label">Administración</span>
+      </a>
+    }
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="nav-right">
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-trigger">
+      <mat-icon>account_circle</mat-icon>
+      <span class="user-name">{{ userName }}</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <div class="menu-header" mat-menu-item disabled>
+        <mat-icon>person</mat-icon>
+        <div class="menu-user-info">
+          <span class="menu-user-name">{{ userName }}</span>
+          <span class="menu-user-email">{{ userEmail }}</span>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

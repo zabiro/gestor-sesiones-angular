@@ -1,0 +1,76 @@
+<div class="calendar-container">
+  <h1 class="page-title">
+    <mat-icon>calendar_month</mat-icon>
+    Calendario de Sesiones
+  </h1>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Buscar sesiones</mat-label>
+      <input matInput
+             placeholder="Buscar por título, descripción o ciudad..."
+             [value]="searchText()"
+             (input)="onSearchChange($event)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Categoría</mat-label>
+      <input matInput
+             placeholder="Buscar categoría..."
+             [value]="selectedCategory()"
+             (input)="filterCategories($any($event.target).value)"
+             [matAutocomplete]="autoCat">
+      <mat-icon matSuffix>category</mat-icon>
+      @if (selectedCategory()) {
+        <button matSuffix mat-icon-button (click)="clearCategory(); $event.stopPropagation()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+      <mat-autocomplete #autoCat="matAutocomplete"
+                        (optionSelected)="onCategorySelected($event.option.value)">
+        <mat-option value="">Todas las categorías</mat-option>
+        @for (cat of filteredCategories; track cat) {
+          <mat-option [value]="cat">{{ cat }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Estado</mat-label>
+      <mat-select [value]="selectedState()" (selectionChange)="onStateChange($event.value)">
+        <mat-option value="">Todos los estados</mat-option>
+        @for (state of states; track state) {
+          <mat-option [value]="state">
+            {{ state | stateLabel }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (hasActiveFilters) {
+      <button mat-icon-button
+              (click)="clearFilters()"
+              class="clear-btn"
+              matTooltip="Limpiar todos los filtros">
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+    }
+  </div>
+
+  <div class="legend">
+    <span class="legend-item">
+      <span class="dot draft"></span> Borrador
+    </span>
+    <span class="legend-item">
+      <span class="dot blocked"></span> Bloqueado
+    </span>
+    <span class="legend-item">
+      <span class="dot hidden"></span> Oculto
+    </span>
+  </div>
+
+  <div class="calendar-wrapper">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</div>

@@ -1,0 +1,172 @@
+<div class="form-container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title class="form-title">
+        <mat-icon>{{ isEdit ? 'edit' : 'add_circle' }}</mat-icon>
+        {{ pageTitle }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- Image Preview -->
+        @if (imagePreview) {
+          <div class="image-preview">
+            <img [src]="imagePreview"
+                 alt="Vista previa de la sesión"
+                 (error)="onImageError($event)">
+          </div>
+        }
+
+        <!-- Image URL -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>URL de imagen</mat-label>
+          <input matInput
+                 formControlName="image"
+                 placeholder="https://ejemplo.com/imagen.jpg">
+          <mat-icon matSuffix>image</mat-icon>
+          <mat-hint>Pega un enlace directo a una imagen (opcional)</mat-hint>
+        </mat-form-field>
+
+        <!-- Title -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título</mat-label>
+          <input matInput
+                 formControlName="title"
+                 placeholder="Título de la sesión"
+                 maxlength="100">
+          <mat-hint align="end">{{ form.get('title')?.value?.length || 0 }}/100</mat-hint>
+          @if (form.get('title')?.hasError('required')) {
+            <mat-error>
+              El título es obligatorio
+            </mat-error>
+          }
+          @if (form.get('title')?.hasError('minlength')) {
+            <mat-error>
+              Mínimo 3 caracteres
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput
+                    formControlName="description"
+                    rows="4"
+                    placeholder="Describe la sesión..."
+                    maxlength="500"></textarea>
+          <mat-hint align="end">{{ form.get('description')?.value?.length || 0 }}/500</mat-hint>
+          @if (form.get('description')?.hasError('required')) {
+            <mat-error>
+              La descripción es obligatoria
+            </mat-error>
+          }
+          @if (form.get('description')?.hasError('minlength')) {
+            <mat-error>
+              Mínimo 10 caracteres
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="row">
+          <!-- Category (Searchable Autocomplete) -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Categoría</mat-label>
+            <input matInput
+                   formControlName="category"
+                   [matAutocomplete]="autoCat"
+                   (input)="filterCategories($any($event.target).value)"
+                   placeholder="Buscar o seleccionar categoría">
+            <mat-icon matSuffix>category</mat-icon>
+            <mat-autocomplete #autoCat="matAutocomplete">
+              @for (cat of filteredCategories; track cat) {
+                <mat-option [value]="cat">
+                  {{ cat }}
+                </mat-option>
+              }
+            </mat-autocomplete>
+            @if (form.get('category')?.hasError('required')) {
+              <mat-error>
+                La categoría es obligatoria
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- City -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Ciudad</mat-label>
+            <input matInput
+                   formControlName="city"
+                   placeholder="Nombre de la ciudad">
+            <mat-icon matSuffix>location_city</mat-icon>
+            @if (form.get('city')?.hasError('required')) {
+              <mat-error>
+                La ciudad es obligatoria
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <!-- Date Picker -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Fecha</mat-label>
+            <input matInput
+                   [matDatepicker]="picker"
+                   formControlName="date"
+                   placeholder="Seleccionar fecha">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (form.get('date')?.hasError('required')) {
+              <mat-error>
+                La fecha es obligatoria
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Time -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Hora</mat-label>
+            <input matInput
+                   type="time"
+                   formControlName="time">
+            @if (form.get('time')?.hasError('required')) {
+              <mat-error>
+                La hora es obligatoria
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- State -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="state">
+            @for (state of states; track state) {
+              <mat-option [value]="state">
+                {{ state | stateLabel }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix>flag</mat-icon>
+        </mat-form-field>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button mat-stroked-button type="button" (click)="cancel()">
+            <mat-icon>arrow_back</mat-icon>
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit">
+            <mat-icon>{{ isEdit ? 'save' : 'add' }}</mat-icon>
+            {{ isEdit ? 'Actualizar Sesión' : 'Crear Sesión' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
