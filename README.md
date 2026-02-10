@@ -103,21 +103,3 @@ ng build
 | Usuario | usuario@gmail.com | 1234 |
 
 > La contraseña puede ser cualquier valor con mínimo 4 caracteres.
-
----
-
-## Preguntas sobre IA
-
-### ¿Qué IA han utilizado?
-GitHub Copilot (Claude) integrado en VS Code.
-
-### ¿Para qué la han utilizado?
-- Generación del scaffolding inicial del proyecto
-- Implementación de componentes, servicios, guards e interceptores
-- Creación de datos mock (seed sessions)
-- Traducción de textos al español
-- Migración de directivas legacy (*ngIf/*ngFor) a la nueva sintaxis de Angular 17+ (@if/@for)
-- Revisión de cumplimiento con los requisitos de la prueba
-
-### ¿Cómo la han utilizado?
-A través de prompts conversacionales en el chat de Copilot dentro de VS Code, indicando los requisitos de la prueba técnica. Se fue construyendo el proyecto de forma iterativa: primero la estructura base, luego los componentes, después la traducción al español, y finalmente la migración a las nuevas directivas de Angular 17+. Cada cambio fue verificado compilando la aplicación.
